@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitung Tinggi Bak Mandi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f4e4;
+            border: 1px solid #d4e5d1;
+            border-radius: 4px;
+        }
+        @media (max-width: 600px) {
+            body {
+                margin: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            button {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Aplikasi Penghitung Bak mandi Dua Kulah</h2>
+        <label for="shape">Pilih bentuk bak mandi:</label>
+        <select id="shape" onchange="updateForm()">
+            <option value="balok">Balok</option>
+            <option value="tabung">Tabung</option>
+        </select>
+
+        <div id="balok-form">
+            <label for="panjang">Panjang (cm):</label>
+            <input type="number" id="panjang" placeholder="Masukkan panjang">
+
+            <label for="lebar">Lebar (cm):</label>
+            <input type="number" id="lebar" placeholder="Masukkan lebar">
+        </div>
+
+        <div id="tabung-form" style="display:none;">
+            <label for="diameter">Diameter (cm):</label>
+            <input type="number" id="diameter" placeholder="Masukkan diameter">
+        </div>
+
+        <button onclick="hitungTinggi()">Hitung</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function updateForm() {
+            const shape = document.getElementById('shape').value;
+            if (shape === 'balok') {
+                document.getElementById('balok-form').style.display = 'block';
+                document.getElementById('tabung-form').style.display = 'none';
+            } else if (shape === 'tabung') {
+                document.getElementById('balok-form').style.display = 'none';
+                document.getElementById('tabung-form').style.display = 'block';
+            }
+        }
+
+        function hitungTinggi() {
+            // Volume dua kulah dalam cm³
+            const volumeDuaKulah = 216000;
+            const shape = document.getElementById('shape').value;
+
+            if (shape === 'balok') {
+                // Ambil nilai panjang dan lebar dari input
+                const panjang = document.getElementById('panjang').value;
+                const lebar = document.getElementById('lebar').value;
+
+                // Periksa apakah input valid
+                if (panjang <= 0 || lebar <= 0) {
+                    document.getElementById('result').innerHTML = "Masukkan panjang dan lebar yang valid.";
+                    return;
+                }
+
+                // Hitung tinggi
+                const tinggi = volumeDuaKulah / (panjang * lebar);
+
+                // Tampilkan hasil
+                document.getElementById('result').innerHTML = "Tinggi yang diperlukan untuk mencapai volume dua kulah adalah " + tinggi.toFixed(2) + " cm.";
+            } else if (shape === 'tabung') {
+                // Ambil nilai diameter dari input
+                const diameter = document.getElementById('diameter').value;
+
+                // Periksa apakah input valid
+                if (diameter <= 0) {
+                    document.getElementById('result').innerHTML = "Masukkan diameter yang valid.";
+                    return;
+                }
+
+                // Hitung tinggi
+                const radius = diameter / 2;
+                const tinggi = volumeDuaKulah / (Math.PI * Math.pow(radius, 2));
+
+                // Tampilkan hasil
+                document.getElementById('result').innerHTML = "Tinggi yang diperlukan untuk mencapai volume dua kulah adalah " + tinggi.toFixed(2) + " cm.";
+            }
+        }
+    </script>
+</body>
+</html>
