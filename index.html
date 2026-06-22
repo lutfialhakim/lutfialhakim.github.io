@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dua Kulah Calculator - Fiqh Utility</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#f3f7ff",
+                    "on-background": "#191c1d",
+                    "tertiary-fixed": "#b1ecf8",
+                    "surface-variant": "#e1e3e4",
+                    "tertiary": "#23616b",
+                    "surface-bright": "#f8f9fa",
+                    "background": "#f8f9fa",
+                    "surface-dim": "#d9dadb",
+                    "surface-container-high": "#e7e8e9",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "surface": "#f8f9fa",
+                    "surface-tint": "#006399",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#a7edff",
+                    "primary": "#005d90",
+                    "on-secondary-container": "#006575",
+                    "on-surface-variant": "#404850",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#95d0dc",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#3f7a85",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#001f25",
+                    "on-primary-fixed-variant": "#004b74",
+                    "on-primary": "#ffffff",
+                    "secondary": "#006878",
+                    "surface-container-low": "#f3f4f5",
+                    "inverse-primary": "#94ccff",
+                    "on-secondary-fixed-variant": "#004e5b",
+                    "primary-fixed-dim": "#94ccff",
+                    "outline-variant": "#bfc7d1",
+                    "outline": "#707881",
+                    "surface-container": "#edeeef",
+                    "primary-fixed": "#cde5ff",
+                    "on-primary-fixed": "#001d32",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-surface": "#191c1d",
+                    "primary-container": "#0077b6",
+                    "on-tertiary-fixed": "#001f24",
+                    "on-tertiary-container": "#e8fbff",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "secondary-container": "#69e5ff",
+                    "secondary-fixed-dim": "#58d6f1",
+                    "on-tertiary-fixed-variant": "#054e58"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "container-max": "1200px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .water-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%230077b6" fill-opacity="0.08" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            z-index: 0;
+        }
+        #three-container {
+            width: 100%;
+            height: 380px;
+            background: radial-gradient(circle at center, #ffffff 0%, #f3f4f5 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .viz-label {
+            position: absolute;
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #005d90;
+            border: 1px solid #bfc7d1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            white-space: nowrap;
+            z-index: 20;
+            transform: translate(-50%, -50%);
+        }
+        .target-marker {
+            position: absolute;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #006878;
+            font-weight: 700;
+            font-size: 13px;
+            z-index: 20;
+            transform: translateY(-50%);
+        }
+        .target-line-indicator {
+            height: 2px;
+            width: 60px;
+            background: #006878;
+            position: relative;
+        }
+        .target-line-indicator::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            background: #006878;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-background min-h-screen flex flex-col relative overflow-x-hidden">
+<header class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full fixed top-0 z-50 bg-surface/80 backdrop-blur-md dark:bg-on-background/80 shadow-sm border-b border-outline-variant/20">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary text-3xl">water_drop</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">Dua Kulah Calc</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low p-2 rounded-full transition-colors" title="Bantuan">help_outline</button>
+<button class="material-symbols-outlined text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low p-2 rounded-full transition-colors" title="Pengaturan">settings</button>
+</div>
+</header>
+<main class="flex-grow pt-24 pb-stack-lg px-margin-mobile flex justify-center items-start">
+<div class="w-full max-w-2xl mx-auto flex flex-col gap-8 items-stretch">
+<!-- LEFT COLUMN: INPUTS -->
+<div class="flex flex-col gap-6">
+<div class="space-y-2">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary leading-tight">Kalkulator Kedalaman Air</h1>
+<p class="font-body-md text-on-surface-variant">
+                    Hitung batas minimal air untuk memenuhi syarat volume Dua Kulah (±216 Liter).
+                </p>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl shadow-xl shadow-primary/5 border border-outline-variant/30 p-6 flex flex-col gap-6">
+<div class="space-y-3">
+<label class="text-xs font-bold text-outline uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">shapes</span> Bentuk Wadah
+                    </label>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center py-4 rounded-xl border-2 border-primary bg-primary-container/10 text-primary transition-all duration-300" id="btn-balok" onclick="setShape('balok')">
+<span class="material-symbols-outlined text-2xl">view_in_ar</span>
+<span class="text-[10px] font-bold uppercase mt-1">Balok</span>
+</button>
+<button class="flex flex-col items-center justify-center py-4 rounded-xl border-2 border-outline-variant bg-surface-container-low text-on-surface-variant transition-all duration-300" id="btn-tabung" onclick="setShape('tabung')">
+<span class="material-symbols-outlined text-2xl">cyclone</span>
+<span class="text-[10px] font-bold uppercase mt-1">Tabung</span>
+</button>
+<button class="flex flex-col items-center justify-center py-4 rounded-xl border-2 border-outline-variant bg-surface-container-low text-on-surface-variant transition-all duration-300" id="btn-frustum" onclick="setShape('frustum')">
+<span class="material-symbols-outlined text-2xl">change_history</span>
+<span class="text-[10px] font-bold uppercase mt-1">Kerucut</span>
+</button>
+</div>
+</div>
+<div class="space-y-4">
+<div class="space-y-4" id="fields-balok">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-on-surface-variant" for="panjang">Panjang (cm)</label>
+<input class="w-full h-11 px-4 rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary/20 bg-surface text-sm transition-shadow" id="panjang" oninput="updateDimensions()" type="number" value="60"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-on-surface-variant" for="lebar">Lebar (cm)</label>
+<input class="w-full h-11 px-4 rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary/20 bg-surface text-sm transition-shadow" id="lebar" oninput="updateDimensions()" type="number" value="60"/>
+</div>
+</div>
+</div>
+<div class="hidden space-y-4" id="fields-tabung">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-on-surface-variant" for="diameter">Diameter (cm)</label>
+<input class="w-full h-11 px-4 rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary/20 bg-surface text-sm transition-shadow" id="diameter" oninput="updateDimensions()" type="number" value="80"/>
+</div>
+</div>
+<div class="hidden space-y-4" id="fields-frustum">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-on-surface-variant" for="diameter-atas">D-Atas (cm)</label>
+<input class="w-full h-11 px-4 rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary/20 bg-surface text-sm transition-shadow" id="diameter-atas" oninput="updateDimensions()" type="number" value="80"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-on-surface-variant" for="diameter-bawah">D-Bawah (cm)</label>
+<input class="w-full h-11 px-4 rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary/20 bg-surface text-sm transition-shadow" id="diameter-bawah" oninput="updateDimensions()" type="number" value="60"/>
+</div>
+</div>
+</div>
+<div class="space-y-1.5 pt-4 border-t border-outline-variant/20">
+<label class="text-xs font-bold text-primary flex items-center gap-1.5" for="tinggi-total">
+<span class="material-symbols-outlined text-sm">straighten</span> Tinggi Wadah Total (cm)
+                        </label>
+<input class="w-full h-11 px-4 rounded-lg border-2 border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface text-sm font-semibold transition-all" id="tinggi-total" oninput="updateDimensions()" type="number" value="100"/>
+</div>
+</div>
+<div class="bg-surface-container-low/30 rounded-xl border border-outline-variant/20 overflow-hidden relative flex flex-col mb-2">
+<div class="px-4 py-2 border-b border-outline-variant/10 flex justify-between items-center bg-surface-container-low/50">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">3d_rotation</span> Visualisasi 3D
+</span>
+<span class="text-[9px] text-outline italic">Geser untuk memutar</span>
+</div>
+<div id="three-container" style="height: 300px;">
+<div class="viz-label" id="label-h">T: 100cm</div>
+<div class="viz-label" id="label-w">P: 60cm</div>
+<div class="viz-label" id="label-d">L: 60cm</div>
+<div class="target-marker opacity-0 transition-opacity duration-700" id="target-marker">
+<div class="target-line-indicator"></div>
+<div class="bg-secondary px-3 py-1.5 rounded-lg text-white shadow-lg">
+<span class="font-bold" id="target-height-label">Batas 2 Kulah: 0 cm</span>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-lowest/80 backdrop-blur-sm border-t border-outline-variant/10 flex justify-center">
+<p class="text-[10px] text-outline font-medium flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary/60"></span>
+Model Skala 1:1 • Biru = Volume Air
+</p>
+</div>
+</div><button class="w-full h-14 bg-primary text-on-primary font-bold rounded-xl shadow-lg hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-3 mt-2" onclick="handleCalculate()">
+<span class="material-symbols-outlined">calculate</span>
+                    Hitung Tinggi Minimal
+                </button>
+<div class="hidden opacity-0 transform translate-y-6 transition-all duration-700 ease-out mt-4" id="result-card">
+<div class="bg-secondary-container/10 border-2 border-secondary/20 rounded-2xl p-6 relative overflow-hidden">
+<div class="water-wave"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="px-4 py-1 bg-secondary/10 rounded-full mb-3">
+<span class="text-[10px] font-black text-secondary uppercase tracking-[0.25em]">Hasil Analisis</span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-5xl font-black text-primary tracking-tight" id="res-val">0</span>
+<span class="text-xl font-bold text-primary/70">cm</span>
+</div>
+<p class="text-sm text-on-surface-variant max-w-xs leading-relaxed">
+Isi air hingga kedalaman minimal <span class="font-bold text-on-surface border-b-2 border-secondary/30" id="res-desc">0 cm</span> untuk mencapai syarat Dua Kulah.
+</p>
+<div class="mt-6 pt-4 border-t border-secondary/10 w-full grid grid-cols-2 gap-4">
+<div class="text-center">
+<div class="text-[9px] text-outline font-black uppercase tracking-wider mb-1">Volume Target</div>
+<div class="text-lg font-bold text-secondary">216 L</div>
+</div>
+<div class="text-center">
+<div class="text-[9px] text-outline font-black uppercase tracking-wider mb-1">Status Wadah</div>
+<div class="text-lg font-bold" id="container-status">Cukup</div>
+</div>
+</div>
+</div>
+</div>
+</div></div>
+<div class="flex items-start gap-3 p-5 bg-tertiary-fixed/20 rounded-xl border border-tertiary-fixed-dim/20">
+<span class="material-symbols-outlined text-tertiary text-xl">info</span>
+<p class="text-xs text-on-tertiary-fixed-variant leading-relaxed">
+<strong>Dua Kulah</strong> setara dengan volume kubus sisi ±60cm (±216,000 cm³). Perhitungan ini membantu memastikan kecukupan volume air untuk wudhu atau mandi sesuai standar fiqh.
+                </p>
+</div>
+</div>
+<!-- RIGHT COLUMN: VISUALIZATION & RESULTS -->
+</div>
+</main>
+<footer class="w-full py-8 px-margin-mobile flex flex-col items-center gap-4 mt-auto bg-surface-container-low border-t border-outline-variant/10">
+<div class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+        Fiqh Utility Hub
+    </div>
+<p class="text-[11px] text-on-surface-variant text-center max-w-lg leading-relaxed opacity-70">
+        © 2024 Fiqh Utility. Dua Kulah (±216,000 cm³) adalah standar baku fiqh untuk kesucian air dalam jumlah banyak sesuai mayoritas madzhab.
+    </p>
+</footer>
+<script>
+    let scene, camera, renderer, container, skeleton, water, targetPlane;
+    let currentShape = 'balok';
+    const VOLUME_TARGET = 216000; // cm3
+    
+    const labels = {
+        h: document.getElementById('label-h'),
+        w: document.getElementById('label-w'),
+        d: document.getElementById('label-d'),
+        target: document.getElementById('target-marker'),
+        targetText: document.getElementById('target-height-label')
+    };
+
+    function initThree() {
+        container = document.getElementById('three-container');
+        scene = new THREE.Scene();
+        
+        const aspect = container.clientWidth / container.clientHeight;
+        camera = new THREE.PerspectiveCamera(40, aspect, 1, 2000);
+        camera.position.set(160, 160, 160);
+        camera.lookAt(0, 40, 0);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
+        directionalLight.position.set(100, 200, 100);
+        scene.add(directionalLight);
+
+        let isDragging = false;
+        let previousMouseX = 0;
+        
+        container.addEventListener('mousedown', e => { isDragging = true; previousMouseX = e.clientX; });
+        window.addEventListener('mouseup', () => isDragging = false);
+        container.addEventListener('mousemove', e => {
+            if (isDragging) {
+                const deltaX = e.clientX - previousMouseX;
+                scene.rotation.y += deltaX * 0.008;
+                previousMouseX = e.clientX;
+            }
+        });
+
+        updateDimensions();
+        animate();
+    }
+
+    function setShape(shape) {
+        currentShape = shape;
+        ['balok', 'tabung', 'frustum'].forEach(s => {
+            const btn = document.getElementById('btn-' + s);
+            const fields = document.getElementById('fields-' + s);
+            if (s === shape) {
+                btn.classList.add('border-primary', 'bg-primary-container/10', 'text-primary');
+                btn.classList.remove('border-outline-variant', 'bg-surface-container-low', 'text-on-surface-variant');
+                fields.classList.remove('hidden');
+            } else {
+                btn.classList.remove('border-primary', 'bg-primary-container/10', 'text-primary');
+                btn.classList.add('border-outline-variant', 'bg-surface-container-low', 'text-on-surface-variant');
+                fields.classList.add('hidden');
+            }
+        });
+        
+        document.getElementById('result-card').classList.add('hidden');
+        document.getElementById('result-card').classList.add('opacity-0', 'translate-y-6');
+        labels.target.classList.add('opacity-0');
+        updateDimensions();
+    }
+
+    function updateDimensions() {
+        if (skeleton) scene.remove(skeleton);
+        if (water) scene.remove(water);
+
+        const hTotal = parseFloat(document.getElementById('tinggi-total').value) || 100;
+        let geometry;
+
+        const materialParams = { color: 0x005d90, transparent: true, opacity: 0.35 };
+
+        if (currentShape === 'balok') {
+            const p = parseFloat(document.getElementById('panjang').value) || 60;
+            const l = parseFloat(document.getElementById('lebar').value) || 60;
+            geometry = new THREE.BoxGeometry(p, hTotal, l);
+            
+            labels.w.innerText = `P: ${p}cm`;
+            labels.d.innerText = `L: ${l}cm`;
+            labels.d.style.display = 'block';
+        } else if (currentShape === 'tabung') {
+            const d = parseFloat(document.getElementById('diameter').value) || 80;
+            // Increase radial segments and set height segments to 1 to show structural wireframe
+            geometry = new THREE.CylinderGeometry(d/2, d/2, hTotal, 12, 1);
+            
+            labels.w.innerText = `D: ${d}cm`;
+            labels.d.style.display = 'none';
+        } else {
+            const d1 = parseFloat(document.getElementById('diameter-atas').value) || 80;
+            const d2 = parseFloat(document.getElementById('diameter-bawah').value) || 60;
+            geometry = new THREE.CylinderGeometry(d1/2, d2/2, hTotal, 12, 1);
+            
+            labels.w.innerText = `D-Atas: ${d1}cm`;
+            labels.d.innerText = `D-Bawah: ${d2}cm`;
+            labels.d.style.display = 'block';
+        }
+
+        labels.h.innerText = `T-Total: ${hTotal}cm`;
+
+        // Skeleton - using EdgesGeometry with threshold to ensure radial segments and top/bottom circles are visible
+        const edges = new THREE.EdgesGeometry(geometry, 1); 
+        skeleton = new THREE.LineSegments(edges, new THREE.LineBasicMaterial(materialParams));
+        skeleton.position.y = hTotal / 2;
+        scene.add(skeleton);
+
+        // Water (Initial hidden state)
+        createWaterMesh(0.1, hTotal); 
+        
+        updateLabelPositions(hTotal);
+    }
+
+    function createWaterMesh(height, totalH) {
+        if (water) scene.remove(water);
+        
+        let wGeo;
+        if (currentShape === 'balok') {
+            const p = parseFloat(document.getElementById('panjang').value) || 60;
+            const l = parseFloat(document.getElementById('lebar').value) || 60;
+            wGeo = new THREE.BoxGeometry(p, height, l);
+        } else if (currentShape === 'tabung') {
+            const d = parseFloat(document.getElementById('diameter').value) || 80;
+            // Clean water visualization uses higher resolution (48 segments)
+            wGeo = new THREE.CylinderGeometry(d/2, d/2, height, 48);
+        } else {
+            const d1 = parseFloat(document.getElementById('diameter-atas').value) || 80;
+            const d2 = parseFloat(document.getElementById('diameter-bawah').value) || 60;
+            // Interpolate top diameter based on fill level
+            const progress = height / totalH;
+            const currentTopR = (d2/2) + ((d1/2 - d2/2) * progress);
+            wGeo = new THREE.CylinderGeometry(currentTopR, d2/2, height, 48);
+        }
+
+        water = new THREE.Mesh(wGeo, new THREE.MeshPhongMaterial({ 
+            color: 0x0077b6, 
+            transparent: true, 
+            opacity: 0.65,
+            shininess: 80
+        }));
+        water.position.y = height / 2;
+        scene.add(water);
+    }
+
+    function updateLabelPositions(h) {
+        if (!skeleton) return;
+        
+        // Height label at the top
+        const vH = new THREE.Vector3(0, h, 0).applyMatrix4(skeleton.matrixWorld).project(camera);
+        labels.h.style.left = `${(vH.x * 0.5 + 0.5) * container.clientWidth}px`;
+        labels.h.style.top = `${(vH.y * -0.5 + 0.5) * container.clientHeight - 20}px`;
+
+        // Width label at center bottom
+        const vB = new THREE.Vector3(0, 0, 0).applyMatrix4(skeleton.matrixWorld).project(camera);
+        labels.w.style.left = `${(vB.x * 0.5 + 0.5) * container.clientWidth - 40}px`;
+        labels.w.style.top = `${(vB.y * -0.5 + 0.5) * container.clientHeight + 25}px`;
+
+        // Depth label slightly offset
+        labels.d.style.left = `${(vB.x * 0.5 + 0.5) * container.clientWidth + 40}px`;
+        labels.d.style.top = `${(vB.y * -0.5 + 0.5) * container.clientHeight + 15}px`;
+
+        // Target marker vertical sync
+        if (!labels.target.classList.contains('opacity-0')) {
+            const hReq = parseFloat(document.getElementById('res-val').innerText);
+            const vT = new THREE.Vector3(0, hReq, 0).applyMatrix4(skeleton.matrixWorld).project(camera);
+            labels.target.style.top = `${(vT.y * -0.5 + 0.5) * container.clientHeight}px`;
+        }
+    }
+
+    function handleCalculate() {
+        const hTotal = parseFloat(document.getElementById('tinggi-total').value);
+        let hReq = 0;
+        let valid = false;
+
+        if (currentShape === 'balok') {
+            const p = parseFloat(document.getElementById('panjang').value);
+            const l = parseFloat(document.getElementById('lebar').value);
+            if (p > 0 && l > 0) { hReq = VOLUME_TARGET / (p * l); valid = true; }
+        } else if (currentShape === 'tabung') {
+            const d = parseFloat(document.getElementById('diameter').value);
+            if (d > 0) { hReq = VOLUME_TARGET / (Math.PI * Math.pow(d/2, 2)); valid = true; }
+        } else {
+            const d1 = parseFloat(document.getElementById('diameter-atas').value);
+            const d2 = parseFloat(document.getElementById('diameter-bawah').value);
+            if (d1 > 0 && d2 > 0) {
+                const r1 = d1 / 2;
+                const r2 = d2 / 2;
+                const volumeTotal = (1/3) * Math.PI * hTotal * (r2*r2 + r2*r1 + r1*r1);
+                if (volumeTotal < VOLUME_TARGET) {
+                    hReq = (VOLUME_TARGET / volumeTotal) * hTotal; 
+                } else {
+                    let low = 0, high = hTotal;
+                    for(let i=0; i<15; i++) {
+                        let mid = (low + high) / 2;
+                        let rMid = r2 + (r1 - r2) * (mid / hTotal);
+                        let vMid = (1/3) * Math.PI * mid * (r2*r2 + r2*rMid + rMid*rMid);
+                        if (vMid < VOLUME_TARGET) low = mid;
+                        else high = mid;
+                    }
+                    hReq = high;
+                }
+                valid = true;
+            }
+        }
+
+        if (valid) {
+            const resultVal = hReq.toFixed(1);
+            document.getElementById('res-val').innerText = resultVal;
+            document.getElementById('res-desc').innerText = resultVal + " cm";
+            
+            const statusEl = document.getElementById('container-status');
+            if (hReq > hTotal) {
+                statusEl.innerText = "Tidak Cukup";
+                statusEl.className = "text-xl font-bold text-error";
+            } else {
+                statusEl.innerText = "Cukup";
+                statusEl.className = "text-xl font-bold text-secondary";
+            }
+
+            const rc = document.getElementById('result-card');
+            rc.classList.remove('hidden');
+            setTimeout(() => rc.classList.remove('opacity-0', 'translate-y-6'), 50);
+            
+            labels.targetText.innerText = `Batas: ${resultVal} cm`;
+            labels.target.classList.remove('opacity-0');
+
+            animateWaterFill(hReq, hTotal);
+        }
+    }
+
+    function animateWaterFill(targetH, totalH) {
+        const dummy = { h: 0.1 };
+        gsap.to(dummy, {
+            h: targetH,
+            duration: 1.5,
+            ease: "power3.out",
+            onUpdate: () => {
+                createWaterMesh(dummy.h, totalH);
+            }
+        });
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        updateLabelPositions(parseFloat(document.getElementById('tinggi-total').value) || 100);
+    }
+
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    initThree();
+</script>
+</body></html>
